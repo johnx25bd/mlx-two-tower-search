@@ -18,3 +18,4 @@ streamlit==1.39.0
 torch
 pandas
 ydata-profiling
+scikit-learn
