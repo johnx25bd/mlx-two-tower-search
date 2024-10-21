@@ -18,3 +18,9 @@ Install dependencies (python 3.12):
 ```bash
 pip install -r requirements.txt
 ``` 
+
+## Download data
+
+```bash
+./utils/download.sh utils/data.txt data/
+```
