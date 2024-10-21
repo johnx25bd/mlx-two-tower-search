@@ -1,5 +1,7 @@
 # Environment
 .env/
+env
 
 # Data
 data/
+src/models/word2vec/*.model
