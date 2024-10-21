@@ -16,3 +16,5 @@ jinja2
 python-multipart
 streamlit==1.39.0
 torch
+pandas
+ydata-profiling
