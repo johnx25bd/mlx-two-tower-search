@@ -10,7 +10,7 @@ Create virtual environment:
 
 ```bash
 python -m venv env
-source env/bin/activate
+source env/bin/activate # "deactivate" to exit
 ```
 
 Install dependencies (python 3.12):
