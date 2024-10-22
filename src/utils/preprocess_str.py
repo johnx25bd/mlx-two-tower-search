@@ -14,6 +14,11 @@ stemmer = PorterStemmer()
 stop_words = set(stopwords.words("english"))
 
 
+def preprocess_list(tokens: list[str]) -> list[str]:
+    tokens = [stemmer.stem(word) for word in tokens if word not in stop_words]
+    tokens = ["[S]"] + tokens + ["[E]"]
+    return tokens
+
 def preprocess_query(query: str) -> list[str]:
     if query is None or pd.isna(query):
         return []
@@ -23,6 +28,6 @@ def preprocess_query(query: str) -> list[str]:
     tokens = simple_preprocess(
         query, deacc=True
     )  # deacc=True removes accents and punctuations
-    tokens = [stemmer.stem(word) for word in tokens if word not in stop_words]
-    tokens = ["[S]"] + tokens + ["[E]"]
+
+    tokens = preprocess_list(tokens)
     return tokens
