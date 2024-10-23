@@ -5,3 +5,5 @@ env
 # Data
 src/models/word2vec/*.model
 *.parquet
+
+.DS_Store
