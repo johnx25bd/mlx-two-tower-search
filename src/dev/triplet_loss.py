@@ -10,7 +10,9 @@ and
 The output loss is this difference, if it is positive, and zero otherwise.
 '''
 
-def triplet_loss_function((query, relevant_document, irrelevant_document), distance_function, margin):
+
+def triplet_loss_function(triplet, distance_function, margin):
+    query, relevant_document, irrelevant_document = triplet
     relevant_distance = distance_function(query, relevant_document)
     irrelevant_distance = distance_function(query, irrelevant_document)
     triplet_loss = max(0, relevant_distance - irrelevant_distance + margin)
