@@ -77,3 +77,4 @@ data/
 *.sqlite3
 
 data/
+wandb/
