@@ -35,6 +35,7 @@ class DocumentProjection(nn.Module):
         self.relu1 = nn.ReLU()
         self.fc2 = nn.Linear(embedding_dim, embedding_dim)
 
+
     def forward(self, doc_encoding):
         x = self.fc1(doc_encoding)
         x = self.relu1(x)
@@ -43,11 +44,11 @@ class DocumentProjection(nn.Module):
         return x
 
 class QueryProjection(nn.Module):
-    def __init__(self, input_size, embedding_dim):
+    def __init__(self, encoding_dim, projection_dim):
         super(QueryProjection, self).__init__()
-        self.fc1 = nn.Linear(input_size, embedding_dim)
+        self.fc1 = nn.Linear(encoding_dim, encoding_dim)
         self.relu1 = nn.ReLU()
-        self.fc2 = nn.Linear(embedding_dim, embedding_dim)
+        self.fc2 = nn.Linear(encoding_dim, projection_dim)
 
 
     def forward(self, doc_encoding):
@@ -66,6 +67,7 @@ class TwoTowerModel(nn.Module):
         super(TwoTowerModel, self).__init__()
         
         self.embedding = embedding_layer
+        self.encoding_dim = embedding_dim # for this model, since we're doing avg pooling
         self.doc_projection = DocumentProjection(embedding_dim, projection_dim)
         self.query_projection = QueryProjection(embedding_dim, projection_dim)
         self.margin = margin
