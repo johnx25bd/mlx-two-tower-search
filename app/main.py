@@ -20,12 +20,12 @@ class DocumentResponse(BaseModel):
 async def search(query_request: QueryRequest):
     query = query_request.query
     query_embedding = preprocess(query)
-    rel_docs, rel_docs_sim, irel_docs, irel_docs_sim = get_docs(query_embedding)
+    rel_docs, urls, distances  = get_docs(query_embedding)
     return {
         "rel_docs": rel_docs,
-        "rel_docs_sim": rel_docs_sim,
-        "irel_docs": irel_docs,
-        "irel_docs_sim": irel_docs_sim,
+        "urls": urls,
+        "distances": distances,
+       
     }
 
 if __name__ == "__main__":

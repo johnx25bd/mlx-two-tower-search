@@ -1,22 +1,57 @@
+from utils.load_data import load_word2vec
+from utils.preprocess_str import str_to_tokens
+import torch.nn as nn
+from models.core import DocumentDataset, TwoTowerModel, loss_fn
+import pandas as pd
+import faiss
 import torch
+from models.HYPERPARAMETERS import FREEZE_EMBEDDINGS, PROJECTION_DIM, MARGIN
 
-def get_docs(embedding: torch.Tensor):
-    # load document_embedding_index
-    # lookup query embedding in document_embedding_index
+# Function to get nearest neighbors
+def get_nearest_neighbors(query, model, df, k=5, index='', word_to_idx=''):
+    query_tokens = torch.tensor([str_to_tokens(query, word_to_idx)])
+    query_mask = (query_tokens != 0).float()
+    query_encoding = model.query_encode(query_tokens, query_mask)
+    query_projection = model.query_project(query_encoding)
 
-    # return top/bottom docs as a list of strings
-    rel_docs = [
-        "doc1",
-        "doc2",
-        "The shift to remote work has fundamentally changed how businesses operate, paving the way for a more flexible, dynamic workforce. With advances in technology and the pandemic accelerating its adoption, remote work has allowed organizations to tap into a global talent pool, transcending geographical limitations. This transformation offers significant benefits: employees can achieve better work-life balance, and companies can reduce overhead costs associated with physical office spaces. However, this shift has also introduced challenges, particularly around team cohesion, communication, and mental health. As teams become more dispersed, maintaining a strong company culture requires intentional efforts from leadership. Companies are increasingly relying on virtual collaboration tools like Slack, Zoom, and project management platforms to facilitate communication and enhance productivity. Mental health support has also become a priority, with many organizations offering wellness programs and resources. While remote work is not without its complexities, it is clear that the benefits are reshaping the future of work. As businesses adapt, they will likely adopt hybrid models, allowing employees to split their time between the office and home. This evolution in work culture represents an exciting opportunity to create a more inclusive and sustainable approach to employment worldwide.",
-        "doc4",
-        "doc5",
-    ]
+    query_vector = query_projection.detach().numpy()
+    faiss.normalize_L2(query_vector)
+    distances, indices = index.search(query_vector, k)
 
-    rel_docs_sim = [0.8, 0.7, 0.6, 0.5, 0.4]
+    documents = df.loc[indices.squeeze()]['doc_relevant']
+    urls = df.loc[indices.squeeze()]['url_relevant']
 
-    irel_docs = ["doc6", "doc7", "doc8", "doc9", "doc10"]
+    return documents, urls, distances
 
-    irel_docs_sim = [0.3, 0.2, 0.1, 0.09, 0.08]
+def get_docs(q):
+    # Load embeddings
+    vocab, embeddings, word_to_idx = load_word2vec()
+    embedding_layer = nn.Embedding.from_pretrained(embeddings, freeze=FREEZE_EMBEDDINGS)
 
-    return rel_docs, rel_docs_sim, irel_docs, irel_docs_sim
+    EMBEDDING_DIM = embeddings.shape[1]
+    VOCAB_SIZE = len(vocab)
+
+    df = pd.read_parquet('data/training-with-tokens.parquet')
+    index = faiss.read_index('data/doc-index-64.faiss')
+    model = TwoTowerModel(
+        embedding_dim=EMBEDDING_DIM,
+        projection_dim=PROJECTION_DIM,
+        embedding_layer=embedding_layer,
+        margin=MARGIN
+    )
+
+    # Fixed loading with weights_only=True
+    model.load_state_dict(
+        torch.load(
+            f'models/two_tower_state_dict.pth',
+            weights_only=True,  # Add this parameter
+            map_location=torch.device('cpu')  # Add this to ensure CPU loading
+        )
+    )
+
+    documents, urls, distances = get_nearest_neighbors(q, model, df, 5, index, word_to_idx)
+    return documents, urls, distances
+
+if __name__ == "__main__":
+    docs,urls,distances=get_docs("What is the capital of France?")
+    print(docs)

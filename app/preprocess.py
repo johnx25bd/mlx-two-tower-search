@@ -26,11 +26,16 @@ def preprocess(query: str):
     embedding = get_string_embedding(query, vocab, word_to_idx, embeddings)
     return embedding
 
+def str_to_tokens(s: str, word_to_idx: dict[str, int]) -> list[int]:
+    split = preprocess_query(s)
+    return [word_to_idx[word] for word in split if word in word_to_idx]
+
+
 def main():
     query = "How to train a neural network"
     embedding = preprocess(query)
     print(f"Embedding shape: {embedding.shape}")
     print(f"First few values: {embedding[:5]}")
-    
+
 if __name__ == "__main__":  # Correct main check syntax
     main()
