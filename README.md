@@ -4,13 +4,13 @@
 ![architecture](public/images/architecture.png)
 
 
-## Setup
+## Local Setup
 
 Create virtual environment:
 
 ```bash
 python -m venv env
-source env/bin/activate # "deactivate" to exit
+source env/bin/activate
 ```
 
 Install dependencies (python 3.12):
@@ -19,8 +19,16 @@ Install dependencies (python 3.12):
 pip install -r requirements.txt
 ``` 
 
-## Download data
+Start the FastAPI server:
 
 ```bash
-./utils/download.sh utils/data.txt data/
+uvicorn app.main:app --reload
 ```
+
+In a seperate terminal, start the streamlit app:
+
+```bash
+streamlit run streamlit_app.py
+```
+
+
