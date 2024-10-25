@@ -16,6 +16,12 @@ class DocumentResponse(BaseModel):
     irel_docs: List[str]
     irel_docs_sim: List[Union[float, int]]
 
+
+@app.get("/")
+async def read_root():
+    return {"message": "Welcome to the search API. Use POST /search to send queries."}
+
+
 @app.post("/search", response_model=DocumentResponse)
 async def search(query_request: QueryRequest):
     query = query_request.query
@@ -28,7 +34,6 @@ async def search(query_request: QueryRequest):
        
     }
 
-if __name__ == "__main__":
-    import uvicorn
-
-    uvicorn.run(app, host="0.0.0.0", port=8000)
+# if __name__ == "__main__":
+#     import uvicorn
+#     uvicorn.run(app, host="0.0.0.0", port=8000)
