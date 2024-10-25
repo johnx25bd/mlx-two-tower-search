@@ -5,7 +5,7 @@ import numpy as np
 import pandas as pd
 import gensim.downloader as api
 
-from preprocess_str import preprocess_list as preprocess
+from utils.preprocess_str import preprocess_list as preprocess
 
 
 def load_word2vec(random_seed=42, embeddings_path='../models/word-vector-embeddings.model', save_path='../models/word-vector-embeddings.model'):
