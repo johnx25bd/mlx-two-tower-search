@@ -24,8 +24,12 @@ def get_nearest_docs(query, model, df, index, k=5):
     query_vector = query_projection.detach().numpy()
     faiss.normalize_L2(query_vector)
     distances, indices = index.search(query_vector, k)
+    neg_distances, neg_indices = index.search(-query_vector, k)
 
     documents = df.loc[indices.squeeze()]['doc_relevant']
     urls = df.loc[indices.squeeze()]['url_relevant']
 
-    return documents, urls, distances
+    neg_documents = df.loc[neg_indices.squeeze()]['doc_relevant']
+    neg_urls = df.loc[neg_indices.squeeze()]['url_relevant']
+
+    return documents, urls, distances, neg_documents, neg_urls, neg_distances
