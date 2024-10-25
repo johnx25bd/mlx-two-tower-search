@@ -55,3 +55,4 @@ def get_docs(q):
 if __name__ == "__main__":
     docs,urls,distances=get_docs("What is the capital of France?")
     print(docs)
+ 

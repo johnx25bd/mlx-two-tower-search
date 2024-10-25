@@ -13,7 +13,7 @@ class QueryRequest(BaseModel):
 class DocumentResponse(BaseModel):
     rel_docs: List[str]
     rel_docs_sim: List[Union[float, int]]
-    irel_docs: List[str]
+    irel_docs: List[str] 
     irel_docs_sim: List[Union[float, int]]
 
 
@@ -31,7 +31,7 @@ async def search(query_request: QueryRequest):
         "rel_docs": rel_docs,
         "urls": urls,
         "distances": distances,
-       
+
     }
 
 # if __name__ == "__main__":

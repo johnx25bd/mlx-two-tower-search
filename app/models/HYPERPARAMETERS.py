@@ -9,3 +9,4 @@ LEARNING_RATE = 0.00001
 NUM_EPOCHS = 3
 MODEL_NAME = "mlx-w2-two-tower-search"
 PROJECTION_DIM = 64
+ 
