@@ -1,13 +1,36 @@
 import torch
-from .utils.preprocess_str import preprocess_query
+from utils.preprocess_str import preprocess_query
+from utils.load_data import load_word2vec
 
+def get_string_embedding(input_string, vocab, word_to_idx, embeddings):
+
+    processed_words = preprocess_query(input_string)
+    word_embeddings = []
+
+    for word in processed_words:
+        if word in word_to_idx:
+            word_idx = word_to_idx[word]
+            word_embedding = embeddings[word_idx]
+            word_embeddings.append(word_embedding)
+
+    if not word_embeddings:
+        return torch.zeros(embeddings.shape[1])
+
+    string_embedding = torch.stack(word_embeddings).mean(dim=0)
+    return string_embedding
 
 def preprocess(query: str):
-    # preprocess function
 
-    # get_embedding function
-    # query_embedding = torch.tensor(query)
-    # generate random tensor of dimension 100
-    query_embedding = torch.rand(100)
+    vocab, embeddings, word_to_idx = load_word2vec()
 
-    return query_embedding
+    embedding = get_string_embedding(query, vocab, word_to_idx, embeddings)
+    return embedding
+
+def main():
+    query = "How to train a neural network"
+    embedding = preprocess(query)
+    print(f"Embedding shape: {embedding.shape}")
+    print(f"First few values: {embedding[:5]}")
+    
+if __name__ == "__main__":  # Correct main check syntax
+    main()
