@@ -1,25 +1,16 @@
 import torch
-from .preprocess import preprocess
-
 
 def get_docs(embedding: torch.Tensor):
-    # lookup embedding in index
-    # comparison with
-    # return top docs as a list of strings
+    # load document_embedding_index
+    # lookup query embedding in document_embedding_index
 
-    relevant_docs = [
-        "doc1",
-        "doc2",
-        "doc3",
-        "doc4",
-        "doc5",
-        "doc6",
-        "doc7",
-        "doc8",
-        "doc9",
-        "doc10",
-    ]
+    # return top/bottom docs as a list of strings
+    rel_docs = ["doc1", "doc2", "doc3", "doc4", "doc5"]
 
-    similarity = [0.8, 0.7, 0.6, 0.5, 0.4, 0.4, 0.4, 0.4, 0.4, 0.4]
+    rel_docs_sim = [0.8, 0.7, 0.6, 0.5, 0.4]
 
-    return relevant_docs, similarity
+    irel_docs = ["doc6", "doc7", "doc8", "doc9", "doc10"]
+
+    irel_docs_sim = [0.3, 0.2, 0.1, 0.09, 0.08]
+
+    return rel_docs, rel_docs_sim, irel_docs, irel_docs_sim

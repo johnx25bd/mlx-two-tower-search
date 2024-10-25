@@ -14,20 +14,28 @@ if search_button and query:
 
     if response.status_code == 200:
         data = response.json()
-        documents = data.get("documents", [])
-        similarity = data.get("similarity", [])
+        rel_docs = data.get("rel_docs", [])
+        rel_docs_sim = data.get("rel_docs_sim", [])
+        irel_docs = data.get("irel_docs", [])
+        irel_docs_sim = data.get("irel_docs_sim", [])
 
         st.subheader(f"Search Results: ")
 
-        df = pd.DataFrame(
-            {
-                "Document": documents,
-                "Similarity": similarity,
-            }
-        )
-        df = df.reset_index(drop=True)
+        # Create dataframe for similar results (top 5)
+        df_similar = pd.DataFrame(
+            {"Document": rel_docs, "Cosine Similarity": rel_docs_sim}
+        ).reset_index(drop=True)
 
-        st.table(df.style.format({"Similarity": "{:.4f}"}))
+        # Create dataframe for dissimilar results (bottom 5)
+        df_dissimilar = pd.DataFrame(
+            {"Document": irel_docs, "Cosine Similarity": irel_docs_sim}
+        ).reset_index(drop=True)
+
+        st.subheader("Most Similar Results:")
+        st.table(df_similar.style.format({"Cosine Similarity": "{:.4f}"}))
+
+        st.subheader("Least Similar Results:")
+        st.table(df_dissimilar.style.format({"Cosine Similarity": "{:.4f}"}))
     else:
         st.error("Error: Unable to retrieve documents. Please try again.")
 else:

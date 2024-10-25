@@ -1,4 +1,5 @@
 import torch
+from .utils.preprocess_str import preprocess_query
 
 
 def preprocess(query: str):
