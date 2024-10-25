@@ -78,3 +78,6 @@ data/
 
 data/
 wandb/
+
+src/models/checkpoints/
+src/models/word2vec/*.model
