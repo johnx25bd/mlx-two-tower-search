@@ -95,6 +95,10 @@ class TwoTowerModel(nn.Module):
     def query_project(self, query_encoding):
         return self.query_projection(query_encoding)
     
+
+    def compare_projections(self, d_projection, q_projection):
+        return F.cosine_similarity(d_projection, q_projection, dim=1)
+    
     def forward(self, doc_ids, query_ids, doc_mask=None, query_mask=None, return_projections=False):
         
         d_encoding = self.doc_encode(doc_ids, doc_mask)
@@ -103,7 +107,7 @@ class TwoTowerModel(nn.Module):
         d_projection = self.doc_project(d_encoding)
         q_projection = self.query_project(q_encoding)
         
-        similarity = F.cosine_similarity(d_projection, q_projection, dim=1)
+        similarity = self.compare_projections(d_projection, q_projection)
         
         if return_projections:
             return similarity, d_projection, q_projection
