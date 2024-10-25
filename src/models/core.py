@@ -3,8 +3,9 @@ from torch.utils.data import Dataset
 from torch.nn.utils.rnn import pad_sequence
 import torch.nn as nn
 import torch.nn.functional as F
+from utils import str_to_tokens
 
-class DocumentDataset(Dataset):
+class DocumentDataset(Dataset): # for training the two-tower model
     def __init__(self, df_input):
         self.docs_rel = df_input['doc_rel_tokens']
         self.docs_irr = df_input['doc_irr_tokens']
@@ -21,6 +22,28 @@ class DocumentDataset(Dataset):
             torch.tensor(self.docs_irr.iloc[idx], dtype=torch.long),
             torch.tensor(self.queries.iloc[idx], dtype=torch.long),
         )
+
+class DocDataset(Dataset): # for creating document projection embeddings
+    def __init__(self, df, word_to_idx):
+        self.df = df
+        self.word_to_idx = word_to_idx
+
+    def __len__(self):
+        return len(self.df)
+
+    def __getitem__(self, idx):
+        doc = self.df.iloc[idx]['doc_relevant']
+        tokens = torch.tensor(str_to_tokens(doc, self.word_to_idx))
+        return tokens, idx
+
+def collate_docdataset(batch):
+    tokens, indices = zip(*batch)
+    tokens = pad_sequence(tokens, batch_first=True, padding_value=0)
+    mask = (tokens != 0).float()
+    return tokens, mask, torch.tensor(indices)
+
+
+
 
 def loss_fn(rel_similarity, irr_similarity, margin):
     assert rel_similarity.shape == irr_similarity.shape, "Similarity tensors must have the same shape"
