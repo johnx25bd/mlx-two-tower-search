@@ -64,7 +64,7 @@ class TwoTowerModel(nn.Module):
                  embedding_layer, # avg pooled embeddings will have dim = embedding_dim
                  projection_dim,
                  margin):
-        super(TwoTowerModel, self).__init__()
+        super().__init__()
         
         self.embedding = embedding_layer
         self.encoding_dim = embedding_dim # for this model, since we're doing avg pooling
@@ -95,7 +95,7 @@ class TwoTowerModel(nn.Module):
     def query_project(self, query_encoding):
         return self.query_projection(query_encoding)
     
-    def forward(self, doc_ids, query_ids, doc_mask=None, query_mask=None):
+    def forward(self, doc_ids, query_ids, doc_mask=None, query_mask=None, return_projections=False):
         
         d_encoding = self.doc_encode(doc_ids, doc_mask)
         q_encoding = self.query_encode(query_ids, query_mask)
@@ -104,6 +104,10 @@ class TwoTowerModel(nn.Module):
         q_projection = self.query_project(q_encoding)
         
         similarity = F.cosine_similarity(d_projection, q_projection, dim=1)
+        
+        if return_projections:
+            return similarity, d_projection, q_projection
+        
         return similarity
 
 

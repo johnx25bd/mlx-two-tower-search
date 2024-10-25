@@ -39,5 +39,17 @@ def str_to_tokens(s: str, word_to_idx: dict[str, int]) -> list[int]:
     split = preprocess_query(s)
     return [word_to_idx[word] for word in split if word in word_to_idx]
 
+def tokenize(df, word_to_idx):
+    # Tokenize all columns in one go
+    def tokenize_row(row):
+        return (
+            str_to_tokens(row['doc_relevant'], word_to_idx),
+            str_to_tokens(row['doc_irrelevant'], word_to_idx),
+            str_to_tokens(row['query'], word_to_idx)
+        )
+    
+    df[['doc_rel_tokens', 'doc_irr_tokens', 'query_tokens']] = df.apply(tokenize_row, axis=1, result_type='expand')
+    return df
+
 
 __all__ = ['preprocess_list', 'str_to_tokens', 'preprocess_query', 'simple_preprocess', 'str_to_list']
