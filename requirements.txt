@@ -11,8 +11,10 @@ seaborn==0.13.2
 datasets==3.0.0
 fastapi[standard]==0.115.2
 pydantic==2.9.2
+streamlit==1.39.0
 uvicorn==0.32.0
 jinja2
 python-multipart
-streamlit==1.39.0
 torch
+nltk
+gensim

@@ -38,12 +38,7 @@ streamlit run streamlit_app.py
 
 ## Steps
 
-Navigate to Project Directory
-   ```bash
-   cd ~/Code/TwoTowerSearch
-   ```
-
-Build Docker Image
+Navigate to project directory and build Docker Image
    ```bash
    docker build -t twotowersearch .
    ```

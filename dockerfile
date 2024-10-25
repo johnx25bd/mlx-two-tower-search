@@ -8,7 +8,8 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 COPY app/ app/
 COPY models/ models/
+COPY start.sh .
 
-EXPOSE 8000
+EXPOSE 8000 8501
 
-CMD ["fastapi", "run", "app/main.py", "--port", "8000"]
+CMD ["bash", "start.sh"]
