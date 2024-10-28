@@ -50,9 +50,11 @@ def get_docs(q):
     )
 
     documents, urls, distances = get_nearest_neighbors(q, model, df, 5, index, word_to_idx)
-    return documents, urls, distances
+    doc=documents.to_list()
+    url=urls.to_list()
+    rel_docs_sim=distances.tolist()
+    return doc, rel_docs_sim
 
 if __name__ == "__main__":
     docs,urls,distances=get_docs("What is the capital of France?")
     print(docs)
- 
