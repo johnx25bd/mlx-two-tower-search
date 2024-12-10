@@ -1,11 +1,13 @@
-from utils.load_data import load_word2vec
-from utils.preprocess_str import str_to_tokens
-import torch.nn as nn
-from models.core import DocumentDataset, TwoTowerModel, loss_fn
-import pandas as pd
-import faiss
 import torch
-from models.HYPERPARAMETERS import FREEZE_EMBEDDINGS, PROJECTION_DIM, MARGIN
+import torch.nn as nn
+
+import faiss
+import pandas as pd
+
+from app.utils.load_data import load_word2vec
+from app.utils.preprocess_str import str_to_tokens
+from app.models.core import DocumentDataset, TwoTowerModel, loss_fn
+from app.models.HYPERPARAMETERS import FREEZE_EMBEDDINGS, PROJECTION_DIM, MARGIN
 
 # Function to get nearest neighbors
 def get_nearest_neighbors(query, model, df, k=5, index='', word_to_idx=''):
@@ -31,8 +33,8 @@ def get_docs(q):
     EMBEDDING_DIM = embeddings.shape[1]
     VOCAB_SIZE = len(vocab)
 
-    df = pd.read_parquet('data/training-with-tokens.parquet')
-    index = faiss.read_index('data/doc-index-64.faiss')
+    df = pd.read_parquet('models/training-with-tokens.parquet')
+    index = faiss.read_index('models/doc-index-64.faiss')
     model = TwoTowerModel(
         embedding_dim=EMBEDDING_DIM,
         projection_dim=PROJECTION_DIM,

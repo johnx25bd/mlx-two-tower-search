@@ -1,6 +1,6 @@
 import torch
-from utils.preprocess_str import preprocess_query
-from utils.load_data import load_word2vec
+from app.utils.preprocess_str import preprocess_query
+from app.utils.load_data import load_word2vec
 
 def get_string_embedding(input_string, vocab, word_to_idx, embeddings):
 

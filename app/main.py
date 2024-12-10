@@ -1,8 +1,11 @@
 from fastapi import FastAPI
 from pydantic import BaseModel
 from typing import List, Union
-from preprocess import preprocess
-from get_docs import get_docs
+
+from app.preprocess import preprocess
+from app.get_docs import get_docs
+
+
 
 app = FastAPI()
 

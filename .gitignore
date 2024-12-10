@@ -76,6 +76,11 @@ data/
 *.db
 *.sqlite3
 
+# Models / Data
+*.faiss
+*.parquet
+*.pth
+
 data/
 wandb/
 

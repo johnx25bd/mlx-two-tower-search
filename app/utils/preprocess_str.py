@@ -1,6 +1,7 @@
 import pandas as pd
 import re
 import string
+from typing import List
 import nltk
 from nltk.corpus import stopwords
 from nltk.stem import PorterStemmer
@@ -14,7 +15,7 @@ stemmer = PorterStemmer()
 stop_words = set(stopwords.words("english"))
 
 
-def preprocess_list(tokens: list[str]) -> list[str]:
+def preprocess_list(tokens: List[str]) -> List[str]:
     tokens = [stemmer.stem(word) for word in tokens if word not in stop_words]
     tokens = ["[S]"] + tokens + ["[E]"]
     return tokens
